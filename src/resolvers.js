@@ -38,6 +38,11 @@ const resolvers={
                 throw new Error("Error in checking Password")
             }
 
+            //if not valid password throw error
+            if(!isPasswordValid){
+                throw new AuthenticationError("Wrong Password");
+            }
+
             //if password matched then generate a token
             let token;
             try{
