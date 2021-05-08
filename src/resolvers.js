@@ -1,7 +1,7 @@
 const { AuthenticationError } = require("apollo-server-errors");
 const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken");
-
+const checkToken=require("./middlewares/checktoken");
 const User=require("./models/user");
 
 const resolvers={
@@ -9,7 +9,8 @@ const resolvers={
         hello:()=>{
             return 'Hello World !!'
         },
-        getAllUsers:async()=>{
+        getAllUsers:async(parent,args,context,info)=>{
+            checkToken(context.req,context.res,context.next)
             return await User.find();
         },
         login:async(parent,args,context,info)=>{

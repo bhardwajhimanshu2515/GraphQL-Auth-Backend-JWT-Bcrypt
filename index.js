@@ -1,6 +1,7 @@
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const mongoose = require("mongoose");
+const checkToken=require("./src/middlewares/checktoken");
 
 const typeDefs = require("./src/typeDefs");
 const resolvers = require("./src/resolvers");
@@ -10,10 +11,11 @@ async function startServer() {
   const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
+    context: ({ req, res,next }) => ({ req, res,next })
   });
-
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app: app });
+
+  apolloServer.applyMiddleware({ app: app});
 
   app.use((req, res) => {
     res.send("Hello these requests are being handled by Express Server");
